@@ -44,7 +44,7 @@ namespace DBOperations
 
         private string GenerateQuery(string procedureName,SqlParameter[] sqlParameters) 
         {
-            return $"EXEC {procedureName} {string.Join(",", sqlParameters.Select(s => $"@{s.ParameterName}"))}";
+            return $"EXEC {procedureName} {string.Join(", ", sqlParameters.Select(s => $"@{s.ParameterName}"))}";
         }
     }
 }
