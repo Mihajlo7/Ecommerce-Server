@@ -30,7 +30,7 @@ namespace Persons.Mediator.Login
                 };
 
                 // execute procedure
-                var result = await  _dbOperations.GetAsync<PasswordResponseDTO>(PersonOperations.LOGIN, parameters);
+                var result = await  _dbOperations.GetAsync<PasswordResponseDTO>(PersonOperations.SP_LOGIN, parameters);
 
                 // check password
                 if(PasswordGeneratorPR.PasswordGenerator

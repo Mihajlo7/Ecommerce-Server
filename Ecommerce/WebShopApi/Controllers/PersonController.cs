@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Persons.Core.DTOs.ChangePassword;
 using Persons.Core.DTOs.Login;
 using Persons.Core.DTOs.Registration;
 using Persons.Service;
@@ -24,6 +25,11 @@ namespace WebShopApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequest)
         {
             return Ok(await _personService.Login(loginRequest));
+        }
+        [HttpPost("changePassword/{id}")]
+        public async Task<IActionResult> ChangePassword(Guid id,[FromBody]ChangePasswordRequestDTO changePassword)
+        {
+            return Ok(await _personService.ChangePassword(id, changePassword));
         }
     }
 }
