@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Persons.Core.DTOs.Login
 {
-    public class PasswordResponseDTO
+    public class LoginResponseDTO
     {
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
+        public bool Success { get; set; }
+        public string Message { get; set; }
     }
 }

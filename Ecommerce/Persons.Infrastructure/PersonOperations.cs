@@ -9,5 +9,6 @@ namespace Persons.Infrastructure
     public interface PersonOperations
     {
         public const string SP_REGISTER_PERSON = "[dbo].[InsertPerson]";
+        public const string LOGIN = "[dbo].[LoginProc]";
     }
 }

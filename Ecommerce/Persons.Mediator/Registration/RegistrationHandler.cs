@@ -63,7 +63,7 @@ namespace Persons.Mediator.Registration
             {
                 return new RegisterResponseDTO
                 {
-                    Id = Guid.Empty,
+                    Number=0,
                     Message = $"Registration has been successfull\nEXCEPTION:{ex.Message}\nINNER:{ex.InnerException}\nSTACKTRACE:{ex.StackTrace} {ex.Procedure},{ex.LineNumber},{ex.Data},{ex.Class}"
                 };
             };
