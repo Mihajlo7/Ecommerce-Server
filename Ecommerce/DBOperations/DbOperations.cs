@@ -29,26 +29,28 @@ namespace DBOperations
         public async Task<T> CreateAsync<T>(string sql, bool output = false, params object[] parameters)
         {
             var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, output);
-            var result = _dbContext.Database.SqlQueryRaw<T>(sql, parameters);
+            var result =await  _dbContext.Database.SqlQueryRaw<T>(query, parameters).ToListAsync();
             //var result = _dbContext.Set<T>().FromSqlRaw(sql, parameters).AsEnumerable();
-            return await result.FirstOrDefaultAsync();
+            return result.First();
         }
 
         public async Task<int> UpdateAsync(string sql, bool output = false, params object[] parameters)
         {
             var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, output);
-            return await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
+            return await _dbContext.Database.ExecuteSqlRawAsync(query, parameters);
         }
 
         public async Task<bool> DeleteAsync(string sql, bool output = false, params object[] parameters)
         {
-            var result = await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
+            var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, output);
+            var result = await _dbContext.Database.ExecuteSqlRawAsync(query, parameters);
             return result > 0;
         }
 
         public async Task<IList<T>> GetAllAsync<T>(string sql)
         {
-            return await _dbContext.Database.SqlQueryRaw<T>(sql).ToListAsync();
+            var query = GenerateSqlQuery(sql, null, false);
+            return await _dbContext.Database.SqlQueryRaw<T>(query).ToListAsync();
         }
 
         public async Task<IList<T>> GetAllAsync<T>(string sql, params object[] parameters)
