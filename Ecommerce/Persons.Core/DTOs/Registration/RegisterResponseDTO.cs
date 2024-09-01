@@ -7,8 +7,9 @@ using Generic.Models;
 
 namespace Persons.Core.DTOs.Registration
 {
-    public class RegisterResponseDTO : GenericDTO
+    public class RegisterResponseDTO 
     {
+        public int Number { get; set; }
         public string Message { get; set; }
     }
 }

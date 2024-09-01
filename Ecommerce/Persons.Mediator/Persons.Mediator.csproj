@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DBOperations\DBOperations.csproj" />
+    <ProjectReference Include="..\Generic.Mediator\Generic.Mediator.csproj" />
+    <ProjectReference Include="..\PasswordGeneratorPR\PasswordGeneratorPR.csproj" />
+    <ProjectReference Include="..\Persons.Core\Persons.Core.csproj" />
+    <ProjectReference Include="..\Persons.Infrastructure\Persons.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

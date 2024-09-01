@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DBOperations
 {
-    public class DbOperations<TDbContext> : IDbOperations<TDbContext> where TDbContext:DbContext
+    public class DbOperations<TDbContext> : IDbOperations<TDbContext> where TDbContext : DbContext
     {
         private readonly TDbContext _dbContext;
 
@@ -17,34 +17,58 @@ namespace DBOperations
         {
             _dbContext = dbContext;
         }
-        public Task<IEnumerable<TDTO>> GetObjectsByProcedure<TDTO>(string procedureName) where TDTO : GenericDTO
+
+        public async Task<int> CreateAsync(string sql, bool output = false, params object[] parameters)
         {
-            throw new NotImplementedException();
+            var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, output);
+            Console.WriteLine(query);
+            var result = await _dbContext.Database.ExecuteSqlRawAsync(query, parameters);
+            return result;
         }
 
-        public Task<IEnumerable<TDTO>> GetObjectsByView<TDTO>(string viewName) where TDTO : GenericDTO
+        public async Task<T> CreateAsync<T>(string sql, bool output = false, params object[] parameters)
         {
-            throw new NotImplementedException();
+            var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, output);
+            var result = _dbContext.Database.SqlQueryRaw<T>(sql, parameters);
+            //var result = _dbContext.Set<T>().FromSqlRaw(sql, parameters).AsEnumerable();
+            return await result.FirstOrDefaultAsync();
         }
 
-        public async Task UpdateObjectStoredProcedureWithOutResult(string procedureName, params SqlParameter[] inputParams)
+        public async Task<int> UpdateAsync(string sql, bool output = false, params object[] parameters)
         {
-            var query=GenerateQuery(procedureName, inputParams);
-            await _dbContext.Database.ExecuteSqlRawAsync(query);
+            var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, output);
+            return await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
         }
 
-        public async Task<Guid> UpdateObjectStoredProcedureWithResult(SqlParameter outputParam,string procedureName, params SqlParameter[] sqlParameters)
+        public async Task<bool> DeleteAsync(string sql, bool output = false, params object[] parameters)
         {
-            var query = GenerateQuery(procedureName, sqlParameters);
-            query = $"{query},@{outputParam.ParameterName} OUTPUT";
-            
-            await _dbContext.Database.ExecuteSqlRawAsync(query,sqlParameters,outputParam );
-            return (Guid)outputParam.Value;
+            var result = await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
+            return result > 0;
         }
 
-        private string GenerateQuery(string procedureName,SqlParameter[] sqlParameters) 
+        public async Task<IList<T>> GetAllAsync<T>(string sql)
         {
-            return $"EXEC {procedureName} {string.Join(", ", sqlParameters.Select(s => $"@{s.ParameterName}"))}";
+            return await _dbContext.Database.SqlQueryRaw<T>(sql).ToListAsync();
+        }
+
+        public async Task<IList<T>> GetAllAsync<T>(string sql, params object[] parameters)
+        {
+            return await _dbContext.Database.SqlQueryRaw<T>(sql, parameters).ToListAsync();
+        }
+
+        public async Task<T> GetAsync<T>(string sql, params object[] parameters)
+        {
+            return await _dbContext.Database.SqlQueryRaw<T>(sql, parameters).FirstAsync();
+        }
+
+        string GenerateSqlQuery(string sql, SqlParameter[] parameters, bool output)
+        {
+            var query = $"{sql} ";
+            if (parameters != null && parameters.Length > 0)
+            {
+                query += string.Join(", ", parameters.Select(x => $"{x.ParameterName} = '{x.Value}'"));
+            }
+            return query;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +9,8 @@ using Generic.Mediator;
 using PasswordGeneratorPR;
 using Persons.Core.DTOs.Registration;
 using Persons.Infrastructure;
+using System.Data;
+using System.Globalization;
 
 namespace Persons.Mediator.Registration
 {
@@ -24,51 +26,47 @@ namespace Persons.Mediator.Registration
         {
             try
             {
+                // hashing password
+                var hash = PasswordGenerator.HashPassword(request.Registration.Password.NewPassword, out var salt);
                 // input parameters
-                var firstName= new SqlParameter("FirstName",request.Registration.FirstName);
-                var lastName= new SqlParameter("LastName",request.Registration.LastName);
-                var birthday = new SqlParameter("BirthDay", request.Registration.BirthDay);
-                var telephone = new SqlParameter("Telephone", request.Registration.Telephone);
-                var email = new SqlParameter("Email", request.Registration.EmailAddress.Email);
-                var emailProm = new SqlParameter("EmailPromotion", request.Registration.EmailAddress.EmailPromotion);
-                var adress1 = new SqlParameter("AddressLine1", request.Registration.Address.AddressLine1);
-                var adress2 = new SqlParameter("AddressLine2", request.Registration.Address.AddressLine2);
-                var city= new SqlParameter("City",request.Registration.Address.City);
-                var postalCode = new SqlParameter("PostalCode", request.Registration.Address.PostalCode);
-                var countryCode = new SqlParameter("CountyCode", request.Registration.Address.CountryCode);
-                var creditCardType = new SqlParameter("CreditCardType", request.Registration.CreditCard.Type);
-                var creditCardNumber = new SqlParameter("CreditCardNumber",request.Registration.CreditCard.Number);
-                var expMonth = new SqlParameter("ExpMonth", request.Registration.CreditCard.ExpMonth);
-                var expYear = new SqlParameter("ExpYear", request.Registration.CreditCard.ExpYear);
-
-                var hash = PasswordGenerator.HashPassword(request.Registration.Password.NewPassword,out var salt);
-                var hashPassword = new SqlParameter("HashPassword", hash);
-                var saltPassword =new SqlParameter("SaltPassword",Convert.ToBase64String(salt));
-                // output parameters
-                var outParam = new SqlParameter
+                Console.WriteLine(request.Registration.Address.CountryCode);
+               
+                var parameters = new SqlParameter[]
                 {
-                    ParameterName = "RegisteredPersonId",
-                    SqlDbType= System.Data.SqlDbType.UniqueIdentifier,
-                    Direction=System.Data.ParameterDirection.Output
+                    new SqlParameter("@FirstName", SqlDbType.NVarChar, 50) { Value = request.Registration.FirstName },
+                    new SqlParameter("@LastName", SqlDbType.NVarChar, 50) { Value=request.Registration.LastName},
+                    new SqlParameter("@BirthDay", SqlDbType.NVarChar, 20) { Value = request.Registration.BirthDay},
+                    new SqlParameter("@Telephone", SqlDbType.NVarChar, 20) { Value = request.Registration.Telephone},
+                    new SqlParameter("@HashPassword", SqlDbType.NVarChar, 500) { Value = hash},
+                    new SqlParameter("@SaltPassword", SqlDbType.NVarChar, 500) { Value = Convert.ToBase64String(salt) },
+                    new SqlParameter("@Email", SqlDbType.NVarChar, 255) { Value = request.Registration.EmailAddress.Email},
+                    new SqlParameter("@EmailPromotion", SqlDbType.Int) { Value = request.Registration.EmailAddress.EmailPromotion },
+                    new SqlParameter("@AddressLine1", SqlDbType.NVarChar, 255) { Value = request.Registration.Address.AddressLine1 },
+                    new SqlParameter("@AddressLine2", SqlDbType.NVarChar, 255) { Value = request.Registration.Address.AddressLine2},
+                    new SqlParameter("@City", SqlDbType.NVarChar, 100) { Value = request.Registration.Address.City},
+                    new SqlParameter("@PostalCode", SqlDbType.NVarChar, 20) { Value = request.Registration.Address.PostalCode},
+                    new SqlParameter("@CountryCode", SqlDbType.NVarChar, 10) { Value = request.Registration.Address.CountryCode },
+                    new SqlParameter("@Type", SqlDbType.NVarChar, 50) { Value = request.Registration.CreditCard.Type},
+                    new SqlParameter("@Number", SqlDbType.NVarChar, 50) { Value = request.Registration.CreditCard.Number },
+                    new SqlParameter("@ExpMonth", SqlDbType.Int) { Value =request.Registration.CreditCard.ExpMonth },
+                    new SqlParameter("@ExpYear", SqlDbType.Int) { Value = request.Registration.CreditCard.ExpYear}
                 };
-
                 // execute stored procedure
-                var registrationId  =
-                    await _dbOperations
-                    .UpdateObjectStoredProcedureWithResult(outParam, PersonOperations.SP_REGISTER_PERSON,
-                    firstName,lastName,birthday,telephone,email,emailProm,hashPassword,saltPassword,adress1,adress2,city,postalCode,countryCode,creditCardType,creditCardNumber,expMonth,expYear);
+                var result = await _dbOperations.CreateAsync(PersonOperations.SP_REGISTER_PERSON, false, parameters);
 
                 return new RegisterResponseDTO
                 {
-                    Id = registrationId,
-                    Message = "Registration has been succefull"
+                    Number= result,
+                    Message = "Registration has been successfull"
                 };
-
-            }
-            catch (Exception ex)
+            } catch (SqlException ex)
             {
-                throw new Exception("Registration has been not succefull");
-            }
+                return new RegisterResponseDTO
+                {
+                    Id = Guid.Empty,
+                    Message = $"Registration has been successfull\nEXCEPTION:{ex.Message}\nINNER:{ex.InnerException}\nSTACKTRACE:{ex.StackTrace} {ex.Procedure},{ex.LineNumber},{ex.Data},{ex.Class}"
+                };
+            };
         }
     }
 }

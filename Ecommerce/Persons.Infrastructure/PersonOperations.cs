@@ -8,6 +8,6 @@ namespace Persons.Infrastructure
 {
     public interface PersonOperations
     {
-        public const string SP_REGISTER_PERSON = "dbo.RegisterPerson";
+        public const string SP_REGISTER_PERSON = "[dbo].[InsertPerson]";
     }
 }

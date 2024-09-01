@@ -10,7 +10,7 @@ namespace Persons.Core.DTOs.Registration
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime BirthDay { get; set; }
+        public string BirthDay { get; set; }
         public string Telephone { get; set; }
         public PasswordDTO Password { get; set; }
         public EmailAddressDTO EmailAddress { get; set; }

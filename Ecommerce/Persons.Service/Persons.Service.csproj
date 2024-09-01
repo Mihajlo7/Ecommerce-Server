@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Persons.Mediator\Persons.Mediator.csproj" />
+  </ItemGroup>
+
 </Project>
