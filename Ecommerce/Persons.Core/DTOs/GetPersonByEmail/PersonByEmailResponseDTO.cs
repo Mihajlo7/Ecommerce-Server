@@ -14,7 +14,6 @@ namespace Persons.Core.DTOs.GetPersonByEmail
         public string LastName { get; set; }
         public DateTime BirthDay { get; set; }
         public string Telephone { get; set; }
-        public string Email { get; set; }
         public EmailAddressDTO EmailAddress { get; set; }
         public ICollection<AddressDTO> Addresses { get; set; }
         public ICollection<CreditCardDTO> CreditCards { get; set; }
