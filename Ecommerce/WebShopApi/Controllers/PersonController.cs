@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Persons.Core.DTOs.ChangePassword;
+using Persons.Core.DTOs.GetPersonByEmail;
 using Persons.Core.DTOs.Login;
 using Persons.Core.DTOs.Registration;
 using Persons.Service;
@@ -30,6 +31,16 @@ namespace WebShopApi.Controllers
         public async Task<IActionResult> ChangePassword(Guid id,[FromBody]ChangePasswordRequestDTO changePassword)
         {
             return Ok(await _personService.ChangePassword(id, changePassword));
+        }
+        [HttpDelete("deletePerson{id}")]
+        public async Task<IActionResult> DeletePerson(Guid id)
+        {
+            return Ok(await _personService.DeletePerson(id));
+        }
+        [HttpPost("getPersonByEmail")]
+        public async Task<IActionResult> GetPersonByEmail([FromBody]PersonRequestDTO personRequest)
+        {
+            return Ok(await _personService.GetPersnByEmail(personRequest));
         }
     }
 }

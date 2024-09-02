@@ -55,7 +55,8 @@ namespace DBOperations
 
         public async Task<IList<T>> GetAllAsync<T>(string sql, params object[] parameters)
         {
-            return await _dbContext.Database.SqlQueryRaw<T>(sql, parameters).ToListAsync();
+            var query = GenerateSqlQuery(sql, (SqlParameter[])parameters, false);
+            return await _dbContext.Database.SqlQueryRaw<T>(query, parameters).ToListAsync();
         }
 
         public async Task<T> GetAsync<T>(string sql, params object[] parameters)

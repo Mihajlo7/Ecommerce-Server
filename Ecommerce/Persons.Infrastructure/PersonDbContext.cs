@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Persons.Core.DTOs.GetPersonByEmail;
+using Persons.Core.DTOs.Registration;
 
 namespace Persons.Infrastructure
 {
     public class PersonDbContext : DbContext
     {
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = 
@@ -15,7 +18,11 @@ namespace Persons.Infrastructure
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<PersonByEmailRawResponse>()
+                .HasNoKey()
+                .ToView("PersonByEmailRaw");
         }
+
+            
     }
 }

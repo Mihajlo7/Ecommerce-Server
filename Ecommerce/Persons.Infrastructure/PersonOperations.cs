@@ -13,5 +13,6 @@ namespace Persons.Infrastructure
         public const string SP_CHANGE_PASSWORD = "[dbo].[ChangePassword]";
         public const string SP_CREATE_CREDIT_CARD = "[dbo].[InsertCreditCard]";
         public const string SP_DELETE_PERSON = "[dbo].[DeletePerson]";
+        public const string SP_GET_PERSON_BY_EMAIL = "[dbo].[GetPersonById]";
     }
 }
