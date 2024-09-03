@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Persons.Core.DTOs.ChangePassword;
+using Persons.Core.DTOs.CreditCard;
 using Persons.Core.DTOs.DeletePerson;
 using Persons.Core.DTOs.GetPersonByEmail;
 using Persons.Core.DTOs.Login;
 using Persons.Core.DTOs.Registration;
+using Persons.Mediator.AddCreditCard;
 using Persons.Mediator.ChangePassword;
+using Persons.Mediator.DeleteCreditCard;
 using Persons.Mediator.DeletePerson;
 using Persons.Mediator.GetPersonByEmail;
 using Persons.Mediator.Login;
@@ -26,9 +29,19 @@ namespace Persons.Service.implementation
             _mediator = mediator;
         }
 
+        public async Task<CreditCardResponseDTO> AddCreditCard(Guid personId, CreditCardRequestDTO creditCard)
+        {
+            return await _mediator.Send(new AddCreditCardCommand(personId, creditCard));
+        }
+
         public async Task<ChangePasswordResponseDTO> ChangePassword(Guid id, ChangePasswordRequestDTO changePasswordRequestDTO)
         {
             return await _mediator.Send(new ChangePasswordCommand(id,changePasswordRequestDTO));
+        }
+
+        public async Task<CreditCardResponseDTO> DeleteCreditCard(Guid personId, CreditCardRequestDTO creditCard)
+        {
+            return await _mediator.Send(new DeleteCreditCardCommand(personId,creditCard));
         }
 
         public async Task<DeletePersonResponseDTO> DeletePerson(Guid id)
