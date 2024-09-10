@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Products.Core.DTOs;
 using Products.Mediator.GetAllProducts;
+using Products.Mediator.GetProductById;
 
 namespace Products.Service.implementation
 {
@@ -27,9 +28,9 @@ namespace Products.Service.implementation
             throw new NotImplementedException();
         }
 
-        public Task<ProductFullDTO> GetProductById(Guid id)
+        public async Task<ProductFullDTO> GetProductById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(new GetProductByIdQuery(id));
         }
 
         public Task<IEnumerable<ProductDTO>> GetProductsByCategory(Guid categoryId, int page = 1)

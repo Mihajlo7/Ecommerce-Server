@@ -15,11 +15,15 @@ namespace WebShopApi.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAllProducts([Required] int page)
         {
             return  Ok(await _productService.GetAllProducts(page));
         }
-        
+        [HttpGet("getById")]
+        public async Task<IActionResult> GetProductById([Required] Guid id)
+        {
+            return Ok(await _productService.GetProductById(id));
+        }
     }
 }
