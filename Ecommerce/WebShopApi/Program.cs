@@ -1,4 +1,5 @@
 using Persons.Service;
+using Products.Service;
 namespace WebShopApi
 {
     public class Program
@@ -16,6 +17,9 @@ namespace WebShopApi
 
             // Person DI
             builder.Services.AddDIPersons();
+
+            // Product DI
+            builder.Services.AddProductDI();
 
             var app = builder.Build();
 

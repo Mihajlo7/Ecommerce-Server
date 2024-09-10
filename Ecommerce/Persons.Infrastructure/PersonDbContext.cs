@@ -20,7 +20,7 @@ namespace Persons.Infrastructure
         {
             modelBuilder.Entity<PersonByEmailRawResponse>()
                 .HasNoKey()
-                .ToView("PersonByEmailRaw");
+                .ToView("ProductDTO");
         }
 
             

@@ -7,11 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\DBOperations\DBOperations.csproj" />
+    <ProjectReference Include="..\Generic.Mediator\Generic.Mediator.csproj" />
     <ProjectReference Include="..\Products.Core\Products.Core.csproj" />
+    <ProjectReference Include="..\Products.Infrastructure\Products.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
