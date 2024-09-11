@@ -12,23 +12,15 @@ namespace Products.Mediator.GetAppleProducts
 {
     internal sealed class GetAppleProducts : IQueryHandler<GetAppleProductsQuery, IEnumerable<ProductDTO>>
     {
-        private readonly IDbOperations<ProductDbContext> _dbOperations;
+        private readonly IProductRepository _productRepository;
 
-        public GetAppleProducts(IDbOperations<ProductDbContext> dbOperations)
+        public GetAppleProducts(IProductRepository productRepository)
         {
-            _dbOperations = dbOperations;
+            _productRepository= productRepository;
         }
         public async Task<IEnumerable<ProductDTO>> Handle(GetAppleProductsQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var foundAppleProducts = await _dbOperations.GetAllAsync<ProductDTO>(ProductsOperations.GET_APPLE_PRODUCTS);
-                return foundAppleProducts;
-
-            }catch (Exception ex)
-            {
-                return null;
-            }
+            return await _productRepository.GetAllAppleProducts();
         }
     }
 }

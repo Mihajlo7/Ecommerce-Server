@@ -1,10 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Persons.Core.DTOs.ChangePassword;
 using Persons.Core.DTOs.CreditCard;
 using Persons.Core.DTOs.GetPersonByEmail;
 using Persons.Core.DTOs.Login;
 using Persons.Core.DTOs.Registration;
-using Persons.Service;
+using Persons.Mediator.AddCreditCard;
+using Persons.Mediator.ChangePassword;
+using Persons.Mediator.DeleteCreditCard;
+using Persons.Mediator.DeletePerson;
+using Persons.Mediator.GetPersonByEmail;
+using Persons.Mediator.Login;
+using Persons.Mediator.Registration;
+
 
 namespace WebShopApi.Controllers
 {
@@ -12,46 +20,74 @@ namespace WebShopApi.Controllers
     [Route("api/people")]
     public class PersonController : ControllerBase
     {
-        private readonly IPersonService _personService;
+        private readonly IMediator _mediator;
 
-        public PersonController(IPersonService personService)
+        public PersonController(IMediator mediator)
         {
-            _personService = personService;
+            _mediator = mediator;
         }
         [HttpPost("registration")]
         public async Task<IActionResult> Registration([FromBody] RegistrationDTO registrationDTO)
         {
-            return Ok(await _personService.RegisterPerson(registrationDTO));
+            var registrationResult=await _mediator.Send(new RegistrationCommand(registrationDTO));
+            if(registrationResult.Number>0)
+            {
+                return Ok(registrationResult);
+            }
+            else
+            {
+                return BadRequest(registrationResult);
+            }
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequest)
         {
-            return Ok(await _personService.Login(loginRequest));
+            var loginResult=await _mediator.Send(new LoginQuery(loginRequest));
+            if(loginResult.Success)
+            {
+                return Ok(loginResult);
+            }
+            else
+            {
+                return BadRequest(loginResult);
+            }
         }
         [HttpPost("changePassword/{id}")]
         public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangePasswordRequestDTO changePassword)
         {
-            return Ok(await _personService.ChangePassword(id, changePassword));
+            var changePasswordResult = await _mediator.Send(new ChangePasswordCommand(id,changePassword));
+            if (changePasswordResult.Sucess)
+            {
+                return Ok(changePasswordResult);
+            }
+            else
+            {
+                return BadRequest(changePasswordResult);
+            }
         }
         [HttpDelete("deletePerson{id}")]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
-            return Ok(await _personService.DeletePerson(id));
+            var deletedPersonResult = await _mediator.Send(new DeletePersonCommand(id));
+            return deletedPersonResult.Sucess ? Ok(deletedPersonResult) : BadRequest(deletedPersonResult);
         }
         [HttpPost("getPersonByEmail")]
         public async Task<IActionResult> GetPersonByEmail([FromBody] PersonRequestDTO personRequest)
         {
-            return Ok(await _personService.GetPersnByEmail(personRequest));
+            var personByEmailResult = await _mediator.Send(new GetPersonByEmalQuery(personRequest));
+            return Ok(personByEmailResult);
         }
         [HttpPost("addCreditCard/{id}")]
         public async Task<IActionResult> AddCreditCard(Guid id,[FromBody] CreditCardRequestDTO creditCardRequest)
         {
-            return Ok(await _personService.AddCreditCard(id, creditCardRequest));
+            var addedCreditCardResult = await _mediator.Send(new AddCreditCardCommand(id,creditCardRequest));
+            return addedCreditCardResult.Success ? Ok(addedCreditCardResult) : BadRequest(addedCreditCardResult);
         }
         [HttpDelete("deleteCreditCard/{id}")]
         public async Task<IActionResult> DeleteCreditCard(Guid id, [FromBody]  CreditCardRequestDTO creditCardRequest)
         {
-            return Ok(await _personService.DeleteCreditCard(id,creditCardRequest));
+            var deletedCreditCardResult = await _mediator.Send(new DeleteCreditCardCommand(id,creditCardRequest));
+            return deletedCreditCardResult.Success ? Ok(deletedCreditCardResult): BadRequest(deletedCreditCardResult);
         }
         
     }

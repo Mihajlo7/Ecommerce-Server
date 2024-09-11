@@ -14,27 +14,21 @@ namespace Persons.Mediator.ChangePassword
 {
     internal class ChangePasswordHandler : ICommandHandler<ChangePasswordCommand, ChangePasswordResponseDTO>
     {
-        private readonly IDbOperations<PersonDbContext> _dbOperations;
+        private readonly IPersonRepository _personRepository;
 
-        public ChangePasswordHandler(IDbOperations<PersonDbContext> dbOperations)
+        public ChangePasswordHandler(IPersonRepository personRepository)
         {
-            _dbOperations = dbOperations;
+            _personRepository = personRepository;
         }
 
         public async Task<ChangePasswordResponseDTO> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
             var hash = PasswordGenerator.HashPassword(request.ChangePasswordRequest.NewPassword, out var salt);
             var stringSalt=Convert.ToBase64String(salt);
-            try
-            {
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@PersonId",System.Data.SqlDbType.UniqueIdentifier){Value=request.id},
-                    new SqlParameter("@HashPassword",System.Data.SqlDbType.NVarChar,500){Value=hash},
-                    new SqlParameter("@SaltPassword",System.Data.SqlDbType.NVarChar,500){Value=stringSalt}
-                };
-                var result = await _dbOperations.UpdateAsync(PersonOperations.SP_CHANGE_PASSWORD,false, parameters);
-                if(result>0)
+
+            var affectedRow = await _personRepository.UpdatePassword(request.id, hash, stringSalt);
+                
+            if(affectedRow>0)
                 {
                     return new ChangePasswordResponseDTO
                     {
@@ -50,10 +44,6 @@ namespace Persons.Mediator.ChangePassword
                         Message = "Password has not been changed"
                     };
                 }
-            }catch(SqlException ex)
-            {
-                throw ;
-            }
         }
     }
 }

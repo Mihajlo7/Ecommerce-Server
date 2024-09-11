@@ -13,30 +13,21 @@ namespace Persons.Mediator.DeleteCreditCard
 {
     internal class DeleteCreditCardHandler : ICommandHandler<DeleteCreditCardCommand, CreditCardResponseDTO>
     {
-        private readonly IDbOperations<PersonDbContext> _dbOperations;
+        private readonly IPersonRepository _personRepository;
 
-        public DeleteCreditCardHandler(IDbOperations<PersonDbContext> dbOperations)
+        public DeleteCreditCardHandler(IPersonRepository personRepository)
         {
-            _dbOperations = dbOperations;
+            _personRepository=personRepository;
         }
         public async Task<CreditCardResponseDTO> Handle(DeleteCreditCardCommand request, CancellationToken cancellationToken)
         {
-            var parameters = new SqlParameter[]
-            {
-                new SqlParameter("@PersonId",System.Data.SqlDbType.UniqueIdentifier){Value=request.personId},
-                new SqlParameter("@Number",System.Data.SqlDbType.NVarChar,50){Value=request.CreditCard.Number},
-                new SqlParameter("@ExpMonth",System.Data.SqlDbType.Int){Value=request.CreditCard.ExpMonth},
-                new SqlParameter("@ExpYear",System.Data.SqlDbType.Int){Value=request.CreditCard.ExpYear},
-            };
-
-            // execute
-            var result = await _dbOperations.DeleteAsync(PersonOperations.SP_DELETE_CREDIT_CARD, false, parameters);
+            var result = await _personRepository.DeleteCreditCard(request.personId,request.CreditCard);
             if (result)
             {
                 return new CreditCardResponseDTO
                 {
                     Success = true,
-                    Message = "Credit Card has been succefully added"
+                    Message = "Credit Card has been succefully deleted"
                 };
             }
             else
@@ -44,7 +35,7 @@ namespace Persons.Mediator.DeleteCreditCard
                 return new CreditCardResponseDTO
                 {
                     Success = false,
-                    Message = "Credit Card has not been added!"
+                    Message = "Credit Card has not been deleted!"
                 };
             }
         }

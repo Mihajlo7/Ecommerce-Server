@@ -13,25 +13,19 @@ namespace Persons.Mediator.Login
 {
     public class LoginHandler : IQueryHandler<LoginQuery, LoginResponseDTO>
     {
-        private readonly IDbOperations<PersonDbContext> _dbOperations;
+        private readonly IPersonRepository _personRepository;
 
-        public LoginHandler(IDbOperations<PersonDbContext> dbOperations)
+        public LoginHandler(IPersonRepository personRepository)
         {
-            _dbOperations = dbOperations;
+            _personRepository = personRepository;
         }
         public async Task<LoginResponseDTO> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
             try
             {
                 // input parameter
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@Email",System.Data.SqlDbType.NVarChar,255){Value=request.LoginRequest.Email}
-                };
-
-                // execute procedure
-                var result = await  _dbOperations.GetAsync<PasswordResponseDTO>(PersonOperations.SP_LOGIN, parameters);
-
+                var result = await _personRepository.GetPasswordByPersonEmail(request.LoginRequest.Email);
+                
                 // check password
                 if(PasswordGeneratorPR.PasswordGenerator
                     .VerifyPassword(request.LoginRequest.Password, result.PasswordHash, Convert.FromBase64String(result.PasswordSalt)))

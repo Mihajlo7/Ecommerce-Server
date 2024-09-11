@@ -8,7 +8,6 @@ namespace Products.Core.DTOs
 {
     public class SizeDTO
     {
-        public string Value { get; set; }
-        public string UnitOfMeasure { get; set; }
+        public string ScreenDiagonal { get; set; }
     }
 }

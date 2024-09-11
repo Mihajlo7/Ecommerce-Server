@@ -13,30 +13,19 @@ namespace Products.Mediator.GetAllProducts
 {
     public sealed class GetAllProductsHandler : IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>>
     {
-        private readonly IDbOperations<ProductDbContext> _dbOperations;
+        private readonly IProductRepository _productRepository;
 
-        public GetAllProductsHandler(IDbOperations<ProductDbContext> dbOperations)
+        public GetAllProductsHandler(IProductRepository productRepository)
         {
-            _dbOperations = dbOperations;
+            _productRepository = productRepository;
         }
 
         public async Task<IEnumerable<ProductDTO>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                int offset = (request.page - 1)*ProductPageInf.NEXT_PRODUCTS;
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@Offset",offset),
-                    new SqlParameter("@Next",ProductPageInf.NEXT_PRODUCTS)
-                };
-                var allProdycts = await _dbOperations.GetAllAsync<ProductDTO>(ProductsOperations.GET_ALL_PRODUCTS, parameters);
-
-                return allProdycts;
-            }catch (Exception ex)
-            {
-                throw ex;
-            }
+            int offset = (request.page - 1) * ProductPageInf.NEXT_PRODUCTS;
+            int next= ProductPageInf.NEXT_PRODUCTS;
+            
+            return await _productRepository.GetAllProducts(offset, next);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Products.Infrastructure
 {
     public class ProductDbContext : DbContext
     {
-        public DbSet<ProductFullRawDTO> ProductsFullRaw {  get; set; }
+        public DbSet<ProductDTO> Products { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString =
@@ -17,9 +17,7 @@ namespace Products.Infrastructure
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .Entity<ProductFullRawDTO>()
-                .ToView("GetAppleProducts");
+            
         }
     }
 }

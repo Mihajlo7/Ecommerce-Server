@@ -8,8 +8,8 @@ namespace Products.Core.DTOs
 {
     public class SubCategoryDTO
     {
-        public Guid SubCategoryId { get; set; }
-        public long SubCategoryNumber { get; set; }
-        public string SubCategoryName { get; set;}
+        public Guid Id { get; set; }
+        public long Number { get; set; }
+        public string Name { get; set;}
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;
 using PasswordGeneratorPR;
 using Persons.Core.DTOs.CreditCard;
 using Persons.Core.DTOs.GetPersonByEmail;
+using Persons.Core.DTOs.Login;
 using Persons.Core.DTOs.Registration;
 using Persons.Core.Mappers;
 
@@ -49,13 +50,13 @@ namespace Persons.Infrastructure.implementation
             return deletedRows > 0;
         }
 
-        public async Task<PasswordDTO> GetPasswordByPersonEmail(string email)
+        public async Task<PasswordResponseDTO> GetPasswordByPersonEmail(string email)
         {
             var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@Email",System.Data.SqlDbType.NVarChar,255){Value=email}
                 };
-            return await _context.GetEntityByStoredProcedure<PasswordDTO>(PersonOperations.SP_LOGIN, parameters);
+            return await _context.GetEntityByStoredProcedure<PasswordResponseDTO>(PersonOperations.SP_LOGIN, parameters);
         }
 
         public async Task<PersonByEmailResponseDTO> GetPersonByEmail(string email)

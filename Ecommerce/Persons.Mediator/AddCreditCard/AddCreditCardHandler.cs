@@ -13,41 +13,23 @@ namespace Persons.Mediator.AddCreditCard
 {
     internal class AddCreditCardHandler : ICommandHandler<AddCreditCardCommand, CreditCardResponseDTO>
     {
-        private readonly IDbOperations<PersonDbContext> _dbOperations;
+        private readonly IPersonRepository _personRepository;
 
-        public AddCreditCardHandler(IDbOperations<PersonDbContext> dbOperations)
+        public AddCreditCardHandler(IPersonRepository personRepository)
         {
-            _dbOperations = dbOperations;
+            _personRepository = personRepository;
         }
         public async Task<CreditCardResponseDTO> Handle(AddCreditCardCommand request, CancellationToken cancellationToken)
         {
-            // parameters
-            var parameters = new SqlParameter[]
-            {
-                new SqlParameter("@PersonId",System.Data.SqlDbType.UniqueIdentifier){Value=request.personId},
-                new SqlParameter("@Type",System.Data.SqlDbType.NVarChar,50){Value=request.CreditCard.Type},
-                new SqlParameter("@Number",System.Data.SqlDbType.NVarChar,50){Value=request.CreditCard.Number},
-                new SqlParameter("@ExpMonth",System.Data.SqlDbType.Int){Value=request.CreditCard.ExpMonth},
-                new SqlParameter("@ExpYear",System.Data.SqlDbType.Int){Value=request.CreditCard.ExpYear},
-            };
+            int numOfInsertedPerson = await _personRepository.InsertCreditCard(request.personId,request.CreditCard);
 
-            // execute
-            var result= await _dbOperations.CreateAsync(PersonOperations.SP_ADD_CREDIT_CARD,false,parameters);
-            if(result>0)
+            if (numOfInsertedPerson == 1)
             {
-                return new CreditCardResponseDTO
-                {
-                    Success = true,
-                    Message = "Credit Card has been succefully added"
-                };
+                return new CreditCardResponseDTO() { Success=true, Message=$"Credit Card has been succefull added to person with id {request.personId}"};
             }
             else
             {
-                return new CreditCardResponseDTO
-                {
-                    Success = false,
-                    Message = "Credit Card has not been added!"
-                };
+                return new CreditCardResponseDTO() { Success = false, Message = $"Adding new Credit Card is failed" };
             }
         }
     }

@@ -11,11 +11,15 @@ namespace Products.Core.DTOs
         public Guid Id { get; set; }
         public long ProductNumber { get; set; }
         public string Name { get; set; }
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set; }
         public decimal Price { get; set; }
         public string Color { get; set; }
-        public string Class {  get; set; }
         public SizeDTO Size { get; set; }
         public WeightDTO Weight { get; set; }
+        public string Status { get; set; }
+        public string Image {  get; set; }
         public SubCategoryDTO SubCategory { get; set; }
+        public CategoryDTO Category { get; set; }
     }
 }

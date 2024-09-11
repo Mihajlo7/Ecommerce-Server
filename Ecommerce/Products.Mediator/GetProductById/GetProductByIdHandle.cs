@@ -15,52 +15,18 @@ namespace Products.Mediator.GetProductById
 {
     public class GetProductByIdHandle : IQueryHandler<GetProductByIdQuery, ProductFullDTO>
     {
-        private readonly IDbOperations<ProductDbContext> _dbOperations;
+        private readonly IProductRepository _productRepository;
 
-        public GetProductByIdHandle(IDbOperations<ProductDbContext> dbOperations)
+        public GetProductByIdHandle(IProductRepository productRepository)
         {
-            _dbOperations = dbOperations;
+            _productRepository = productRepository;
         }
         public async Task<ProductFullDTO> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@ProductId",System.Data.SqlDbType.UniqueIdentifier){Value=request.productId}
-                };
-
-                var rawProductWithFullData = await _dbOperations.GetAsync<ProductFullRawDTO>(ProductsOperations.GET_PRODUCT_BY_ID,parameters);
-
-                var mappedProductWithFullData= MapToProductFullDTO(rawProductWithFullData);
-                return mappedProductWithFullData;
-
-            }catch (Exception ex)
-            {
-                return null;
-            }
+            var foundProductById = await _productRepository.GetProductById(request.productId);
+            return foundProductById;
         }
 
-        private ProductFullDTO MapToProductFullDTO(ProductFullRawDTO rawDTO)
-        {
-            return new ProductFullDTO
-            {
-                Id = rawDTO.Id,
-                ProductNumber = rawDTO.ProductNumber,
-                Name = rawDTO.Name,
-                Price = rawDTO.Price,
-                Color = rawDTO.Color,
-                Class = rawDTO.Class,
-                Size = JsonSerializer.Deserialize<SizeDTO>(rawDTO.Size), // Parsiranje JSON stringa u objekat SizeDTO
-                Weight = JsonSerializer.Deserialize<WeightDTO>(rawDTO.Weight),
-
-                SubCategory = new SubCategoryDTO
-                {
-                    SubCategoryId = rawDTO.SubCategoryId,
-                    SubCategoryNumber = rawDTO.SubCategoryNumber,
-                    SubCategoryName = rawDTO.SubCategoryName
-                }
-            };
-        }
+        
     }
 }

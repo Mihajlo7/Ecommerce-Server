@@ -32,7 +32,8 @@ namespace DBOperations
             (this DbContext dbContext, string query, SqlParameter[] parameters, bool output = false)
         {
             var dbQuery = GenerateSqlQuery(query, parameters, output);
-            return await dbContext.Database.SqlQueryRaw<T>(dbQuery, parameters).FirstAsync();
+            var allData= await dbContext.Database.SqlQueryRaw<T>(dbQuery, parameters).ToListAsync();
+            return allData.First();
         }
         // Insert, Update, Delete entity in stored procedure
         public static async Task<int> ChangeStateEntityByStoredProcedure

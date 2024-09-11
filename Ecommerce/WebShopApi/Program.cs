@@ -1,5 +1,5 @@
-using Persons.Service;
-using Products.Service;
+
+
 namespace WebShopApi
 {
     public class Program
@@ -16,7 +16,7 @@ namespace WebShopApi
             builder.Services.AddSwaggerGen();
 
             // Person DI
-            builder.Services.AddDIPersons();
+            builder.Services.AddPersonDI();
 
             // Product DI
             builder.Services.AddProductDI();

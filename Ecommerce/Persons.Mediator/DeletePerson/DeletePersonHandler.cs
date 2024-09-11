@@ -13,20 +13,14 @@ namespace Persons.Mediator.DeletePerson
 {
     internal class DeletePersonHandler : ICommandHandler<DeletePersonCommand, DeletePersonResponseDTO>
     {
-        IDbOperations<PersonDbContext> _dbOperations;
-        public DeletePersonHandler(IDbOperations<PersonDbContext> dbOperations)
+        private readonly IPersonRepository _personRepository;
+        public DeletePersonHandler(IPersonRepository personRepository)
         {
-            _dbOperations = dbOperations;
+            _personRepository = personRepository;
         }
         public async Task<DeletePersonResponseDTO> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@PersonId",System.Data.SqlDbType.UniqueIdentifier){Value=request.id}
-                };
-                var result = await _dbOperations.DeleteAsync(PersonOperations.SP_DELETE_PERSON, false, parameters);
+            var result = await _personRepository.DeletePerson(request.id);
                 if (result)
                 {
                     return new DeletePersonResponseDTO
@@ -43,10 +37,7 @@ namespace Persons.Mediator.DeletePerson
                         Message = "Person has been not deleted"
                     };
                 }
-            }catch (SqlException ex)
-            {
-                throw;
-            }
+            
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Products.Core.DTOs
 {
     public class WeightDTO
     {
-        public double Value { get; set; }
-        public string UnitOfMeasure { get; set; }
+        public string Weight { get; set; }
     }
 }

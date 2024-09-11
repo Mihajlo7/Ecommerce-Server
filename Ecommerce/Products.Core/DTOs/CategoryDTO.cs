@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace Products.Core.DTOs
 {
-    public class ProductDTO
+    public class CategoryDTO
     {
         public Guid Id { get; set; }
-        public long ProductNumber { get; set; }
+        public long Number { get; set; }
         public string Name { get; set; }
-        public string ShortDescription { get; set; }
-        public decimal Price { get; set; }
-        public string Image {  get; set; }
-        
     }
 }
