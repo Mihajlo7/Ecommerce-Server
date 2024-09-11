@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DBOperations\DBOperations.csproj" />
+    <ProjectReference Include="..\PasswordGeneratorPR\PasswordGeneratorPR.csproj" />
     <ProjectReference Include="..\Persons.Core\Persons.Core.csproj" />
   </ItemGroup>
 

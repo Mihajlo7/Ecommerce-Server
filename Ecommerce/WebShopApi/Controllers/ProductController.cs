@@ -25,5 +25,11 @@ namespace WebShopApi.Controllers
         {
             return Ok(await _productService.GetProductById(id));
         }
+
+        [HttpGet("apple")]
+        public async Task<IActionResult> GetAppleProducts()
+        {
+            return Ok(await _productService.GetAppleProducts());
+        }
     }
 }
