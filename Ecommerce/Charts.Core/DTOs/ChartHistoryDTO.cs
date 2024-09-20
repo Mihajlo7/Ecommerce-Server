@@ -11,5 +11,6 @@ namespace Charts.Core.DTOs
         public Guid PersonId { get; set; }
         public string Products { get; set; }
         public decimal Total {  get; set; }
+        public ChartStatus Status { get; set; }
     }
 }

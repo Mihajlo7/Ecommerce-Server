@@ -11,6 +11,6 @@ namespace Charts.Infrastructure
     {
         public Task<ChartRawDTO> GetActiveChart(Guid personId);
         public Task<bool> DeleteActiveChart(Guid personId);
-        public Task<int> UpdateChart(ChartUpdateDTO chart);
+        public Task<int> UpdateChart(ChartRawDTO chart);
     }
 }
