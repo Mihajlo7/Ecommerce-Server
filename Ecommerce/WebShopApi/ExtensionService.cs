@@ -4,11 +4,18 @@ using Persons.Mediator;
 using Products.Infrastructure;
 using Products.Infrastructure.implementation;
 using Products.Mediator;
+using WebShopApi.ExceptionHandlers;
 
 namespace WebShopApi
 {
     public static class ExtensionService
     {
+        public static IServiceCollection AddExceptionHandlers(this IServiceCollection services)
+        {
+            services.AddExceptionHandler<SqlExceptionHandler>();
+
+            return services;
+        }
         public static IServiceCollection AddPersonDI(this IServiceCollection services)
         {
             services.AddScoped<PersonDbContext>();
@@ -24,5 +31,6 @@ namespace WebShopApi
 
             return services;
         }
+
     }
 }

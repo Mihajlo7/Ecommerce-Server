@@ -21,6 +21,11 @@ namespace WebShopApi
             // Product DI
             builder.Services.AddProductDI();
 
+
+
+            // Exception Handlers
+            builder.Services.AddExceptionHandlers();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
