@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Charts.Core.DTOs
 {
-    public enum ChartStatus
+    public class ChartResponseDTO
     {
-        Unkwnown = 0,
-        Updated=   1, 
-        Deleted = 2,
-        Ordered = 3,
+        public bool Success { get; set; }
+        public string Message { get; set; }
     }
 }

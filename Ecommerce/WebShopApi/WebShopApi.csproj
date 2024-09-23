@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Charts.Mediator\Charts.Mediator.csproj" />
     <ProjectReference Include="..\Persons.Mediator\Persons.Mediator.csproj" />
     <ProjectReference Include="..\Products.Mediator\Products.Mediator.csproj" />
   </ItemGroup>

@@ -21,7 +21,8 @@ namespace WebShopApi
             // Product DI
             builder.Services.AddProductDI();
 
-
+            // Chart DI
+            builder.Services.AddChartDI();
 
             // Exception Handlers
             builder.Services.AddExceptionHandlers();

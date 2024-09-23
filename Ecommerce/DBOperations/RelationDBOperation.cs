@@ -16,8 +16,10 @@ namespace DBOperations
             var formatedQuery = $"{query} ";
             if (parameters != null && parameters.Length > 0)
             {
-                formatedQuery += string.Join(", ", parameters.Select(x => $"{x.ParameterName} = '{x.Value}'"));
+                //formatedQuery += string.Join(", ", parameters.Select(x => $"{x.ParameterName} = '{x.Value}'"));
+                formatedQuery += string.Join(", ", parameters.Select(x=>x.ParameterName));
             }
+            Console.WriteLine(formatedQuery);
             return formatedQuery;
         }
         // Getting entities by stored procedure
@@ -33,7 +35,7 @@ namespace DBOperations
         {
             var dbQuery = GenerateSqlQuery(query, parameters, output);
             var allData= await dbContext.Database.SqlQueryRaw<T>(dbQuery, parameters).ToListAsync();
-            return allData.First();
+            return allData.FirstOrDefault();
         }
         // Insert, Update, Delete entity in stored procedure
         public static async Task<int> ChangeStateEntityByStoredProcedure

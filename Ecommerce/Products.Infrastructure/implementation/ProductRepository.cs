@@ -72,5 +72,16 @@ namespace Products.Infrastructure.implementation
                 (ProductsOperations.GET_PRODUCT_BY_ID, parameters);
             return productByIdRaw.mapProductRawToProductFull();
         }
+
+        public async Task<ProductDTO> GetProductByIdBaseInfo(Guid productId)
+        {
+            var parameters = new SqlParameter[]
+            {
+                new SqlParameter("@ProductId",productId)
+            };
+            var productByIdRaw = await _context.GetEntityByStoredProcedure<ProductDTO>
+                (ProductsOperations.GET_PRODUCT_BY_ID_BASE_INFO, parameters);
+            return productByIdRaw;
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Products.Infrastructure
         Task<IEnumerable<ProductDTO>> GetAllProductsByCategory(Guid categoryId, int offset, int next);
         Task<IEnumerable<ProductDTO>> GetAllProducts(int offset,int next);
         Task<ProductFullDTO> GetProductById(Guid productId);
+        Task<ProductDTO> GetProductByIdBaseInfo(Guid productId);
         Task<IEnumerable<ProductDTO>> GetAllAppleProducts();
     }
 }

@@ -12,6 +12,7 @@ namespace Products.Infrastructure
         public const string GET_PRODUCTS_BY_CATEGORY = "dbo.GetProductsByCategory";
         public const string GET_ALL_PRODUCTS = "dbo.GetAllProducts";
         public const string GET_PRODUCT_BY_ID = "dbo.GetProductById";
+        public const string GET_PRODUCT_BY_ID_BASE_INFO = "dbo.GetProductByIdBaseInfo";
         public const string GET_APPLE_PRODUCTS = "dbo.GetAppleProducts";
         public const string GET_SAMSUNG_PRODUCTS = "dbo.GetSamsungProducts";
     }

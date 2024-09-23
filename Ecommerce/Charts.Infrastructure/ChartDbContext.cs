@@ -7,7 +7,7 @@ namespace Charts.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString =
-                "Server=.;Database=master_chart;Trusted_Connection=True;TrustServerCertificate=True;";
+                "Server=.;Database=master_charts;Trusted_Connection=True;TrustServerCertificate=True;";
             optionsBuilder.UseSqlServer(connectionString)
                 .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
                 .EnableSensitiveDataLogging()

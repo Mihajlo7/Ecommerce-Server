@@ -14,8 +14,8 @@ namespace Charts.Core.DTOs
         public Guid Id {  get; set; }
         public Guid PersonId { get; set; }
         public decimal Total {  get; set; }
-        [JsonIgnore(Condition =JsonIgnoreCondition.WhenWritingNull)]
-        public int Status { get; set; }
-        public ICollection<CategoryDTO> Categories { get; set; }
+        [JsonIgnore(Condition =JsonIgnoreCondition.WhenWritingDefault)]
+        public ChartStatus Status { get; set; }
+        public ICollection<ProductDTO> Products { get; set; }
     }
 }

@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Charts.Infrastructure\Charts.Infrastructure.csproj" />
+    <ProjectReference Include="..\Generic.Mediator\Generic.Mediator.csproj" />
+    <ProjectReference Include="..\Products.Infrastructure\Products.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

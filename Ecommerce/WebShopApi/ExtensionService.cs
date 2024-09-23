@@ -1,4 +1,7 @@
-﻿using Persons.Infrastructure;
+﻿using Charts.Infrastructure;
+using Charts.Infrastructure.implementation;
+using Charts.Mediator;
+using Persons.Infrastructure;
 using Persons.Infrastructure.implementation;
 using Persons.Mediator;
 using Products.Infrastructure;
@@ -28,6 +31,16 @@ namespace WebShopApi
             services.AddScoped<ProductDbContext>();
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddProductMediator();
+
+            return services;
+        }
+
+        public static IServiceCollection AddChartDI (this IServiceCollection services)
+        {
+            services.AddScoped<ChartDbContext>();
+            services.AddScoped<IChartRepository, ChartRepository>();
+            services.AddScoped<IHistoryChartRepository, HistoryChartRepository>();
+            services.AddChartMediator();
 
             return services;
         }

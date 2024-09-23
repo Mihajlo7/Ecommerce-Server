@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Charts.Core.DTOs
         public Guid Id { get; set; }
         public Guid PersonId { get; set; }
         public string Products { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        
+        public DateTime? UpdatedAt { get; set; }
     }
 }
